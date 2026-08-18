@@ -1,0 +1,12 @@
+{
+  "name": "hizir-game-arena-pages",
+  "private": true,
+  "scripts": {
+    "login": "wrangler login",
+    "deploy": "wrangler pages deploy public --project-name=hizir-game-arena",
+    "dev": "wrangler pages dev public"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
