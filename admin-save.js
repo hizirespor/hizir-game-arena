@@ -1,70 +1,138 @@
-function b64url(bytes) {
-  let s = "";
-  for (const b of bytes) s += String.fromCharCode(b);
-  return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
-}
-
-async function sign(payload, secret) {
-  const enc = new TextEncoder();
-  const key = await crypto.subtle.importKey(
-    "raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]
-  );
-  const sig = await crypto.subtle.sign("HMAC", key, enc.encode(payload));
-  return b64url(new Uint8Array(sig));
-}
-
-async function validToken(token, secret) {
-  try {
-    const parts = token.split(".");
-    if (parts.length !== 3) return false;
-    const [tsRaw, nonce, signature] = parts;
-    const ts = Number(tsRaw);
-    if (!Number.isFinite(ts)) return false;
-    if (Date.now() - ts > 12 * 60 * 60 * 1000 || ts > Date.now() + 60_000) return false;
-    const expected = await sign(`${tsRaw}.${nonce}`, secret);
-    return expected === signature;
-  } catch {
-    return false;
-  }
-}
-
 export async function onRequestPost(context) {
-  const secret = context.env.ADMIN_PASSWORD;
-  if (!secret) {
-    return Response.json(
-      { error: "ADMIN_PASSWORD Cloudflare Secret olarak tanımlı değil." },
-      { status: 500 }
+  try {
+    const request = context.request;
+    const env = context.env;
+
+    if (!env.SITE_DATA) {
+      return jsonResponse(
+        { error: "SITE_DATA binding bulunamadı." },
+        500
+      );
+    }
+
+    const authHeader = request.headers.get("Authorization") || "";
+
+    if (!authHeader.startsWith("Bearer ")) {
+      return jsonResponse(
+        { error: "Yetkisiz işlem." },
+        401
+      );
+    }
+
+    const token = authHeader.substring(7);
+
+    const tokenData = await env.SITE_DATA.get(
+      `admin_token:${token}`
+    );
+
+    if (!tokenData) {
+      return jsonResponse(
+        { error: "Oturum geçersiz veya süresi dolmuş." },
+        401
+      );
+    }
+
+    let incomingData;
+
+    try {
+      incomingData = await request.json();
+    } catch (e) {
+      return jsonResponse(
+        { error: "Geçersiz veri gönderildi." },
+        400
+      );
+    }
+
+    const allowedFields = [
+      "eyebrow",
+      "announcement",
+      "title",
+      "subtitle",
+
+      "aboutTitle",
+      "aboutText",
+
+      "feature1",
+      "feature2",
+      "feature3",
+
+      "address",
+      "phone",
+      "whatsapp",
+      "instagram",
+      "maps",
+
+      "s1v",
+      "s1l",
+      "s2v",
+      "s2l",
+      "s3v",
+      "s3l",
+      "s4v",
+      "s4l",
+
+      "galleryImage1",
+      "galleryImage2",
+      "galleryImage3"
+    ];
+
+    const currentDataRaw =
+      await env.SITE_DATA.get("site_content");
+
+    let currentData = {};
+
+    if (currentDataRaw) {
+      try {
+        currentData = JSON.parse(currentDataRaw);
+      } catch (e) {
+        currentData = {};
+      }
+    }
+
+    allowedFields.forEach((field) => {
+      if (
+        Object.prototype.hasOwnProperty.call(
+          incomingData,
+          field
+        )
+      ) {
+        currentData[field] =
+          typeof incomingData[field] === "string"
+            ? incomingData[field].trim()
+            : incomingData[field];
+      }
+    });
+
+    await env.SITE_DATA.put(
+      "site_content",
+      JSON.stringify(currentData)
+    );
+
+    return jsonResponse({
+      success: true,
+      message: "Değişiklikler kaydedildi."
+    });
+
+  } catch (error) {
+    return jsonResponse(
+      {
+        error: "Sunucu hatası.",
+        detail: String(error?.message || error)
+      },
+      500
     );
   }
+}
 
-  if (!context.env.SITE_DATA) {
-    return Response.json(
-      { error: "SITE_DATA KV binding tanımlı değil." },
-      { status: 500 }
-    );
-  }
-
-  const auth = context.request.headers.get("authorization") || "";
-  const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
-  if (!(await validToken(token, secret))) {
-    return Response.json({ error: "Oturum geçersiz. Tekrar giriş yap." }, { status: 401 });
-  }
-
-  let body;
-  try { body = await context.request.json(); }
-  catch { return Response.json({ error: "Geçersiz veri." }, { status: 400 }); }
-
-  const allowed = [
-    "eyebrow","announcement","title","subtitle","aboutTitle","aboutText",
-    "feature1","feature2","feature3","address","phone","whatsapp",
-    "instagram","maps","s1v","s1l","s2v","s2l","s3v","s3l","s4v","s4l"
-  ];
-
-  const clean = {};
-  for (const key of allowed) {
-    if (typeof body?.[key] === "string") clean[key] = body[key].slice(0, 5000);
-  }
-
-  await context.env.SITE_DATA.put("site_content", JSON.stringify(clean));
-  return Response.json({ ok: true });
+function jsonResponse(data, status = 200) {
+  return new Response(
+    JSON.stringify(data),
+    {
+      status,
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8",
+        "Cache-Control": "no-store"
+      }
+    }
+  );
 }
