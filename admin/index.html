@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Hızır Game Arena | Yönetim Paneli</title>
+<style>
+:root{--accent:#fecc0e;--bg:#050505;--panel:#0c0c0c;--line:rgba(254,204,14,.28);--muted:#999;--text:#f5f5f5}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;background:radial-gradient(circle at 80% 0,rgba(254,204,14,.08),transparent 34rem),var(--bg);color:var(--text)}button,input,textarea{font:inherit}.shell{width:min(1180px,calc(100% - 28px));margin:auto}.admin-header{display:flex;align-items:center;justify-content:space-between;padding:18px 0;border-bottom:1px solid #1d1d1d}.brand{display:flex;align-items:center;gap:12px}.brand img{width:58px;height:48px;object-fit:contain}.brand strong,.brand span{display:block}.brand strong{color:var(--accent);font-weight:900;letter-spacing:.16em}.brand span{font-size:10px;letter-spacing:.14em;color:#aaa;margin-top:4px}.header-actions{display:flex;gap:8px}.ghost,.primary{border:0;border-radius:12px;padding:12px 16px;font-weight:900;cursor:pointer;text-decoration:none}.ghost{background:#141414;color:#fff;border:1px solid #252525}.primary{background:var(--accent);color:#080808}.login-card{width:min(520px,100%);margin:10vh auto;padding:34px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(254,204,14,.07),transparent),var(--panel)}.kicker{color:var(--accent);font-weight:900;letter-spacing:.15em;font-size:11px}.login-card h1,.editor-top h1{font-size:44px;letter-spacing:-.05em;margin:10px 0}.login-card p,.editor-top p{color:var(--muted);line-height:1.6}.login-card form{display:grid;gap:16px;margin-top:24px}label{display:grid;gap:8px;font-size:12px;font-weight:800;color:#d9d9d9}input,textarea{width:100%;background:#090909;color:#fff;border:1px solid #262626;border-radius:11px;padding:12px;outline:none}input:focus,textarea:focus{border-color:var(--accent)}.msg{font-size:12px;min-height:18px;color:#aaa}.msg.error{color:#ff7777}.msg.ok{color:#8ee49a}.editor-top{display:flex;align-items:end;justify-content:space-between;gap:24px;padding:50px 0 28px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}fieldset{display:grid;grid-template-columns:1fr 1fr;gap:14px;border:1px solid #222;border-radius:18px;padding:20px;background:#090909}legend{color:var(--accent);font-weight:900;padding:0 8px}.wide{grid-column:1/-1}.toggle-row{grid-column:1/-1;display:flex;align-items:center;gap:10px}.toggle-row input{width:18px;height:18px}.hint{grid-column:1/-1;margin:0;color:var(--muted);font-size:12px;line-height:1.5}.savebar{position:sticky;bottom:12px;margin:22px 0 40px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:rgba(8,8,8,.94);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:flex-end;gap:14px}@media(max-width:760px){.grid{grid-template-columns:1fr}.editor-top{align-items:flex-start;flex-direction:column}.editor-top .primary{width:100%}fieldset{grid-template-columns:1fr}.wide{grid-column:auto}.savebar{justify-content:space-between}.login-card h1,.editor-top h1{font-size:36px}}
+</style>
+</head>
+<body>
+  <div class="shell">
+    <header class="admin-header">
+      <div class="brand"><img src="/assets/logo.png" alt="Hızır"><div><strong>HIZIR</strong><span>YÖNETİM PANELİ</span></div></div>
+      <div class="header-actions"><a class="ghost" href="/" target="_blank">Siteyi Aç</a><button id="logout" class="ghost" hidden>Çıkış</button></div>
+    </header>
+
+    <main>
+      <section id="login-view" class="login-card">
+        <span class="kicker">GÜVENLİ GİRİŞ</span>
+        <h1>Yönetim paneli</h1>
+        <p>Site içeriğini değiştirmek için yönetici şifreni gir.</p>
+        <form id="login-form">
+          <label>Yönetici şifresi<input id="password" type="password" autocomplete="current-password" required placeholder="••••••••"></label>
+          <button class="primary" type="submit">Giriş Yap</button>
+          <div id="login-msg" class="msg"></div>
+        </form>
+      </section>
+
+      <section id="editor-view" hidden>
+        <div class="editor-top"><div><span class="kicker">CANLI İÇERİK</span><h1>Siteyi yönet</h1><p>Kaydet dediğinde değişiklikler ziyaretçilere yansır.</p></div><button id="save-top" class="primary">Değişiklikleri Kaydet</button></div>
+        <form id="editor-form">
+          <div class="grid">
+            <fieldset><legend>Ana Sayfa</legend>
+              <label>Başlık 1<input name="heroTitleMain"></label>
+              <label>Vurgulu başlık<input name="heroTitleAccent"></label>
+              <label class="wide">Açıklama<textarea name="heroDescription" rows="4"></textarea></label>
+              <label class="wide">Ana görsel URL / dosya yolu<input name="heroImage" placeholder="assets/arena-1.webp"></label>
+            </fieldset>
+
+            <fieldset><legend>Performans Bilgileri</legend>
+              <label>Monitör Hz<input name="refreshRate"></label>
+              <label>CPU<input name="cpu"></label>
+              <label>GPU<input name="gpu"></label>
+              <label>Fiber<input name="fiber"></label>
+            </fieldset>
+
+            <fieldset><legend>Google Yorumları</legend>
+              <label>Puan<input name="googleRating" placeholder="4,7"></label>
+              <label>Yorum yazısı<input name="googleReviewCount" placeholder="1.100+ gerçek kullanıcı yorumu"></label>
+            </fieldset>
+
+            <fieldset><legend>Duyuru / Kampanya</legend>
+              <label class="toggle-row"><input name="campaignActive" type="checkbox"> Duyuruyu sitede göster</label>
+              <label>Başlık<input name="campaignTitle"></label>
+              <label class="wide">Açıklama<textarea name="campaignText" rows="3"></textarea></label>
+              <label>Buton yazısı<input name="campaignButtonText"></label>
+              <label>Buton linki<input name="campaignLink" placeholder="#konum"></label>
+            </fieldset>
+
+            <fieldset><legend>Hakkımızda</legend>
+              <label>Yıl / kısa ifade<input name="aboutYear"></label>
+              <label class="wide">Paragraf 1<textarea name="aboutText1" rows="4"></textarea></label>
+              <label class="wide">Paragraf 2<textarea name="aboutText2" rows="4"></textarea></label>
+            </fieldset>
+
+            <fieldset><legend>İletişim & Sosyal</legend>
+              <label>Telefon görünümü<input name="phoneDisplay"></label>
+              <label>Telefon (+90...)<input name="phoneE164"></label>
+              <label>WhatsApp (905...)<input name="whatsappNumber"></label>
+              <label>Instagram kullanıcı adı<input name="instagramHandle"></label>
+              <label class="wide">Instagram linki<input name="instagramUrl"></label>
+              <label class="wide">Google Maps linki<input name="mapsUrl"></label>
+              <label class="wide">Adres<input name="address"></label>
+              <label>Çalışma saatleri<input name="openingHours"></label>
+            </fieldset>
+
+            <fieldset><legend>Oyunlar</legend>
+              <label class="wide">Her satıra bir oyun<textarea name="games" rows="12"></textarea></label>
+            </fieldset>
+
+            <fieldset><legend>Galeri Görselleri</legend>
+              <p class="hint">Şimdilik mevcut dosya yolu veya internet üzerindeki doğrudan görsel URL'sini kullanabilirsin.</p>
+              <label class="wide">Görsel 1<input name="galleryImage1"></label>
+              <label class="wide">Görsel 2<input name="galleryImage2"></label>
+              <label class="wide">Görsel 3<input name="galleryImage3"></label>
+            </fieldset>
+          </div>
+          <div class="savebar"><div id="save-msg" class="msg"></div><button class="primary" type="submit">Kaydet ve Yayınla</button></div>
+        </form>
+      </section>
+    </main>
+  </div>
+  <script>
+(() => {
+  const loginView=document.getElementById('login-view');
+  const editorView=document.getElementById('editor-view');
+  const loginForm=document.getElementById('login-form');
+  const editorForm=document.getElementById('editor-form');
+  const loginMsg=document.getElementById('login-msg');
+  const saveMsg=document.getElementById('save-msg');
+  const logout=document.getElementById('logout');
+  const saveTop=document.getElementById('save-top');
+
+  const setMsg=(el,msg,type='')=>{el.textContent=msg;el.className='msg '+type};
+  async function api(path,opts={}){const r=await fetch(path,{cache:'no-store',headers:{'content-type':'application/json',...(opts.headers||{})},...opts});let j={};try{j=await r.json()}catch{}if(!r.ok)throw new Error(j.error||'İşlem başarısız.');return j}
+  function showEditor(){loginView.hidden=true;editorView.hidden=false;logout.hidden=false}
+  function showLogin(){loginView.hidden=false;editorView.hidden=true;logout.hidden=true}
+  function fill(c){for(const el of editorForm.elements){if(!el.name)continue;if(el.name==='games')el.value=(c.games||[]).join('\n');else if(el.type==='checkbox')el.checked=Boolean(c[el.name]);else el.value=c[el.name]??''}}
+  function collect(){const c={};for(const el of editorForm.elements){if(!el.name)continue;if(el.name==='games')c.games=el.value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);else if(el.type==='checkbox')c[el.name]=el.checked;else c[el.name]=el.value.trim()}return c}
+  async function load(){const me=await api('/api/me');if(!me.authenticated){showLogin();return}showEditor();const data=await api('/api/site-data');fill(data.config||{})}
+  loginForm.addEventListener('submit',async e=>{e.preventDefault();setMsg(loginMsg,'Giriş yapılıyor...');try{await api('/api/login',{method:'POST',body:JSON.stringify({password:document.getElementById('password').value})});setMsg(loginMsg,'');await load()}catch(err){setMsg(loginMsg,err.message,'error')}});
+  editorForm.addEventListener('submit',async e=>{e.preventDefault();await save()});
+  saveTop.addEventListener('click',async()=>save());
+  async function save(){setMsg(saveMsg,'Kaydediliyor...');try{const out=await api('/api/site-data',{method:'POST',body:JSON.stringify({config:collect()})});fill(out.config||{});setMsg(saveMsg,'Kaydedildi. Site güncellendi.','ok')}catch(err){setMsg(saveMsg,err.message,'error')}}
+  logout.addEventListener('click',async()=>{try{await api('/api/logout',{method:'POST',body:'{}'})}finally{showLogin()}});
+  load().catch(err=>{showLogin();setMsg(loginMsg,err.message,'error')});
+})();
+  </script>
+</body>
+</html>
