@@ -240,6 +240,35 @@ button{
 </div>
 
 <div class="card">
+  <h2>🖼️ Galeri Görselleri</h2>
+
+  <div class="grid">
+
+    <div class="full">
+      <label>Görsel 1</label>
+      <input id="galleryImage1" placeholder="/assets/galeri-1.jpg veya doğrudan görsel linki">
+    </div>
+
+    <div class="full">
+      <label>Görsel 2</label>
+      <input id="galleryImage2" placeholder="/assets/galeri-2.jpg veya doğrudan görsel linki">
+    </div>
+
+    <div class="full">
+      <label>Görsel 3</label>
+      <input id="galleryImage3" placeholder="/assets/galeri-3.jpg veya doğrudan görsel linki">
+    </div>
+
+    <div class="full">
+      <div class="note">
+        Görsel adreslerini değiştirdikten sonra aşağıdaki Kaydet butonuna bas.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="card">
   <button class="save" onclick="saveContent()">💾 DEĞİŞİKLİKLERİ KAYDET</button>
   <div id="status"></div>
 </div>
@@ -252,7 +281,8 @@ const fields = [
   "aboutTitle","aboutText",
   "feature1","feature2","feature3",
   "address","phone","whatsapp","instagram","maps",
-  "s1v","s1l","s2v","s2l","s3v","s3l","s4v","s4l"
+  "s1v","s1l","s2v","s2l","s3v","s3l","s4v","s4l",
+  "galleryImage1","galleryImage2","galleryImage3"
 ];
 
 const token = localStorage.getItem("hizir_admin_token");
