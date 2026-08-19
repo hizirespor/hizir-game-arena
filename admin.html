@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hızır Game Arena | Yönetim Paneli</title>
+
+<style>
+:root{
+  --y:#ffcc00;
+  --bg:#070707;
+  --card:#111;
+  --line:#3c3300;
+  --muted:#aaa;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+}
+.wrap{
+  max-width:1000px;
+  margin:auto;
+  padding:30px 18px 80px;
+}
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:25px;
+}
+h1{
+  margin:0;
+  font-size:38px;
+}
+.yellow{color:var(--y)}
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:22px;
+  margin-bottom:18px;
+}
+.card h2{
+  color:var(--y);
+  margin:0 0 18px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+.full{grid-column:1/-1}
+label{
+  display:block;
+  font-size:14px;
+  color:#bbb;
+  margin-bottom:7px;
+  font-weight:700;
+}
+input,textarea{
+  width:100%;
+  background:#181818;
+  border:1px solid #444;
+  color:#fff;
+  border-radius:12px;
+  padding:13px;
+  font-size:15px;
+}
+input:focus,textarea:focus{
+  outline:none;
+  border-color:var(--y);
+}
+textarea{
+  min-height:100px;
+  resize:vertical;
+}
+button{
+  border:0;
+  cursor:pointer;
+  font-weight:900;
+  border-radius:13px;
+  padding:14px 20px;
+}
+.save{
+  background:var(--y);
+  color:#080808;
+  font-size:17px;
+}
+.logout{
+  background:#252525;
+  color:#fff;
+}
+#status{
+  margin-top:15px;
+  font-weight:700;
+}
+.ok{color:#38d97c}
+.err{color:#ff5555}
+.note{
+  color:#999;
+  font-size:13px;
+  margin-top:8px;
+}
+@media(max-width:700px){
+  .grid{grid-template-columns:1fr}
+  .full{grid-column:auto}
+  h1{font-size:29px}
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <div class="yellow"><b>HIZIR GAME ARENA</b></div>
+    <h1>Yönetim Paneli</h1>
+  </div>
+  <button class="logout" onclick="logout()">Çıkış Yap</button>
+</header>
+
+<div class="card">
+  <h2>📢 Ana Sayfa & Kampanya</h2>
+  <div class="grid">
+
+    <div>
+      <label>Üst küçük yazı</label>
+      <input id="eyebrow">
+    </div>
+
+    <div>
+      <label>Duyuru / Kampanya</label>
+      <input id="announcement">
+    </div>
+
+    <div class="full">
+      <label>Ana Başlık</label>
+      <textarea id="title"></textarea>
+    </div>
+
+    <div class="full">
+      <label>Ana Açıklama</label>
+      <textarea id="subtitle"></textarea>
+    </div>
+
+  </div>
+</div>
+
+<div class="card">
+  <h2>🎮 Hakkımızda</h2>
+  <div class="grid">
+
+    <div class="full">
+      <label>Hakkımızda Başlığı</label>
+      <input id="aboutTitle">
+    </div>
+
+    <div class="full">
+      <label>Hakkımızda Yazısı</label>
+      <textarea id="aboutText"></textarea>
+    </div>
+
+  </div>
+</div>
+
+<div class="card">
+  <h2>⚡ Özellikler</h2>
+  <div class="grid">
+
+    <div class="full">
+      <label>Özellik 1</label>
+      <input id="feature1">
+    </div>
+
+    <div class="full">
+      <label>Özellik 2</label>
+      <input id="feature2">
+    </div>
+
+    <div class="full">
+      <label>Özellik 3</label>
+      <input id="feature3">
+    </div>
+
+  </div>
+</div>
+
+<div class="card">
+  <h2>🖥️ Sistem Bilgileri</h2>
+  <div class="grid">
+    <div><label>Monitör Başlığı</label><input id="s1v"></div>
+    <div><label>Monitör Açıklaması</label><input id="s1l"></div>
+
+    <div><label>İnternet Başlığı</label><input id="s2v"></div>
+    <div><label>İnternet Açıklaması</label><input id="s2l"></div>
+
+    <div><label>Ekran Kartı</label><input id="s3v"></div>
+    <div><label>Ekran Kartı Açıklaması</label><input id="s3l"></div>
+
+    <div><label>İşlemci</label><input id="s4v"></div>
+    <div><label>İşlemci Açıklaması</label><input id="s4l"></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>📞 İletişim & WhatsApp</h2>
+
+  <div class="grid">
+    <div class="full">
+      <label>Adres</label>
+      <input id="address">
+    </div>
+
+    <div>
+      <label>Telefon</label>
+      <input id="phone">
+    </div>
+
+    <div>
+      <label>WhatsApp Numarası</label>
+      <input id="whatsapp">
+      <div class="note">Örnek: 905303898892</div>
+    </div>
+
+    <div>
+      <label>Instagram</label>
+      <input id="instagram">
+    </div>
+
+    <div>
+      <label>Google Maps Linki</label>
+      <input id="maps">
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <button class="save" onclick="saveContent()">💾 DEĞİŞİKLİKLERİ KAYDET</button>
+  <div id="status"></div>
+</div>
+
+</div>
+
+<script>
+const fields = [
+  "eyebrow","announcement","title","subtitle",
+  "aboutTitle","aboutText",
+  "feature1","feature2","feature3",
+  "address","phone","whatsapp","instagram","maps",
+  "s1v","s1l","s2v","s2l","s3v","s3l","s4v","s4l"
+];
+
+const token = localStorage.getItem("hizir_admin_token");
+
+if (!token) {
+  location.href = "/admin-login.html";
+}
+
+async function loadContent(){
+  const status = document.getElementById("status");
+
+  try{
+    const r = await fetch("/api/content", {
+      cache:"no-store"
+    });
+
+    const data = await r.json();
+
+    fields.forEach(key=>{
+      const el = document.getElementById(key);
+      if(el) el.value = data[key] || "";
+    });
+
+    status.className = "ok";
+    status.textContent = "✓ Site bilgileri yüklendi.";
+  }
+  catch(e){
+    status.className = "err";
+    status.textContent = "Site bilgileri yüklenemedi.";
+  }
+}
+
+async function saveContent(){
+  const status = document.getElementById("status");
+
+  status.className = "";
+  status.textContent = "Kaydediliyor...";
+
+  const data = {};
+
+  fields.forEach(key=>{
+    const el = document.getElementById(key);
+    data[key] = el ? el.value : "";
+  });
+
+  try{
+    const r = await fetch("/api/admin-save",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization":"Bearer " + token
+      },
+      body:JSON.stringify(data)
+    });
+
+    const result = await r.json();
+
+    if(r.status === 401){
+      localStorage.removeItem("hizir_admin_token");
+      location.href="/admin-login.html";
+      return;
+    }
+
+    if(!r.ok){
+      throw new Error(result.error || "Kayıt başarısız");
+    }
+
+    status.className = "ok";
+    status.textContent = "✓ Değişiklikler başarıyla kaydedildi.";
+  }
+  catch(e){
+    status.className = "err";
+    status.textContent = "❌ " + e.message;
+  }
+}
+
+function logout(){
+  localStorage.removeItem("hizir_admin_token");
+  location.href="/admin-login.html";
+}
+
+loadContent();
+</script>
+
+</body>
+</html>
