@@ -17,7 +17,7 @@
       align-items: center;
       justify-content: center;
       background: #070707;
-      color: white;
+      color: #fff;
       font-family: Arial, Helvetica, sans-serif;
       padding: 20px;
     }
@@ -62,7 +62,7 @@
       border-radius: 16px;
       border: 2px solid #ffcc00;
       background: #181818;
-      color: white;
+      color: #fff;
       font-size: 18px;
       outline: none;
     }
@@ -150,12 +150,18 @@
           return;
         }
 
-        if (data.token) {
-          localStorage.setItem("hizir_admin_token", data.token);
+        if (!data.token) {
+          message.className = "error";
+          message.textContent = "Giriş anahtarı alınamadı.";
+          return;
         }
+
+        localStorage.setItem("hizir_admin_token", data.token);
 
         message.className = "success";
         message.textContent = "Giriş başarılı ✓";
+
+        window.location.href = "/admin.html";
 
       } catch (error) {
         message.className = "error";
